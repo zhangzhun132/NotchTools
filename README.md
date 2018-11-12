@@ -1,6 +1,7 @@
-# 1、概述
-
 ![](https://devcenter.huawei.com/consumer/cn/sites/default/files/ueditor/1/upload/catcher/20180531/1527748756170423.png)
+
+
+# 1、概述
 
 刘海屏指的是手机屏幕上方由于追求极致边框而采用的方案，表现为在顶部有块黑色遮挡，长得像刘海，所以叫刘海屏。
 目前google在Android P上已经对刘海屏的适配进行了统一，所以在targetApi >= 28上可以使用谷歌官方推荐的适配方案进行刘海屏适配。但是在Android O版本的刘海屏如何适配呢？这就是本文要重点阐述的内容了：
