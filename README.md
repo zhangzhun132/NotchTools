@@ -1,10 +1,14 @@
 # 1、概述
 
 ![](https://devcenter.huawei.com/consumer/cn/sites/default/files/ueditor/1/upload/catcher/20180531/1527748756170423.png)
+
 刘海屏指的是手机屏幕上方由于追求极致边框而采用的方案，表现为在顶部有块黑色遮挡，长得像刘海，所以叫刘海屏。
 目前google在Android P上已经对刘海屏的适配进行了统一，所以在targetApi >= 28上可以使用谷歌官方推荐的适配方案进行刘海屏适配。但是在Android O版本的刘海屏如何适配呢？这就是本文要重点阐述的内容了：
+
 1、对国内四大厂商（华为、小米、OPPO、VIVO）对Android O 版本刘海屏的适配方案进行介绍；
+
 2、提出对Android O 版本刘海屏的通用解决方案，包括全屏占用刘海屏、全屏不占用刘海屏两种情况；
+
 3、提出适配工具[NotchTools](https://github.com/zhangzhun132/NotchTools/tree/master)解决方案，让你的应用简单快捷的适配全面屏
 
 # 2、适配与未适配的效果对比
