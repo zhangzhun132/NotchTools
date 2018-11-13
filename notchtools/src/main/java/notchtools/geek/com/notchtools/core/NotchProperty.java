@@ -18,6 +18,12 @@ public class NotchProperty {
      */
     private boolean mIsNotch;
 
+    /**
+     * 全屏占用刘海区域时布局需要下移（布局的MarginTop）的距离
+     * 和mHeight的区别是，mHeight是刘海的真实高度，但是mMarginTop不一定是刘海高度
+     * 因为在vivo刘海屏手机上，全屏是不占用刘海的，所以就无需下移，mMarginTop是0
+     */
+    private int mMarginTop;
 
     public int geNotchHeight() {
         return mHeight;
@@ -33,5 +39,13 @@ public class NotchProperty {
 
     public void setNotch(boolean mIsNotch) {
         this.mIsNotch = mIsNotch;
+    }
+
+    public int getMarginTop() {
+        return mMarginTop;
+    }
+
+    public void setMarginTop(int mMarginTop) {
+        this.mMarginTop = mMarginTop;
     }
 }

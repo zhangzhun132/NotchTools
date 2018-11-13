@@ -23,7 +23,7 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
 
     @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        onBindCallBackWithNotchProperty(activity, notchCallBack);
+        onBindCallBackWithNotchProperty(activity, getNotchHeight(activity.getWindow()), notchCallBack);
         NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
     }
 
@@ -39,15 +39,16 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
         }
     }
 
-    protected void addFakeNotchViewOnActivity(Activity activity, ViewGroup toolbarContainer) {
-        if (toolbarContainer == null) {
-            return;
+    protected void onBindCallBackWithNotchProperty(Activity activity, int marginTop, OnNotchCallBack notchCallBack) {
+        if (notchCallBack != null) {
+            NotchProperty notchProperty = new NotchProperty();
+            notchProperty.setNotchHeight(getNotchHeight(activity.getWindow()));
+            notchProperty.setNotch(isNotchScreen(activity.getWindow()));
+            notchProperty.setMarginTop(marginTop);
+            if (notchCallBack != null) {
+                notchCallBack.onNotchPropertyCallback(notchProperty);
+            }
         }
-        //如果系统在4.4以下,不支持沉浸式.
-        View view = new View(activity);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getNotchHeight(activity.getWindow())));
-        view.setBackgroundColor(Color.BLACK);
-        toolbarContainer.addView(view);
     }
 
 }

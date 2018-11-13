@@ -79,8 +79,15 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
         super.fullScreenDontUseStatus(activity, notchCallBack);
     }
 
+    /**
+     * vivo手机没对刘海做出适配方案，不管怎么样，全屏永远是不占用刘海
+     * 所以全屏不占用刘海情况下，MarginTop就设为0即可
+     * @param activity
+     * @param notchCallBack
+     */
     @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        super.fullScreenUseStatus(activity, notchCallBack);
+        onBindCallBackWithNotchProperty(activity, 0, notchCallBack);
+        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
     }
 }
