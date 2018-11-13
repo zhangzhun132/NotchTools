@@ -28,7 +28,7 @@ public class FullScreenUseNotchActivity extends BaseActivity {
         NotchTools.getFullScreenTools().fullScreenUseStatus(this, new OnNotchCallBack() {
             @Override
             public void onNotchPropertyCallback(NotchProperty notchProperty) {
-                int notchHeight = notchProperty.geNotchHeight();
+                int notchHeight = notchProperty.getMarginTop();
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackView.getLayoutParams();
                 layoutParams.topMargin += notchHeight;
                 mBackView.setLayoutParams(layoutParams);
