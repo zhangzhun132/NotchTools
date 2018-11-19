@@ -3,6 +3,7 @@ package notchtools.geek.com.notchtools.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.view.Window;
 import java.lang.reflect.Method;
@@ -30,12 +31,25 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int getNotchHeight(Window window) {
-        int result;
+        int result = 0;
         if (window == null) {
             return 0;
         }
         Context context = window.getContext();
-        result = NotchStatusBarUtils.getStatusBarHeight(context);
+        if (isHideNotch(window.getContext())) {
+            result = NotchStatusBarUtils.getStatusBarHeight(context);
+        } else {
+            result = getRealNotchHeight(context);
+        }
+        return result;
+    }
+
+    private int getRealNotchHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("notch_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
         return result;
     }
 
@@ -86,5 +100,18 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * MIUI 针对 Notch 设备，有一个“隐藏屏幕刘海”的设置项（设置-全面屏-隐藏屏幕刘海
+     * 具体表现是：系统会强制盖黑状态栏（无视应用的Notch使用声明）
+     * 视觉上达到隐藏刘海的效果。但会给某些应用带来适配问题（控件/内容遮挡或过于靠边等）。
+     * 因此开发者在适配时，还需要检查开启“隐藏屏幕刘海”后，应用的页面是否显示正常。
+     * @param activity
+     * @return
+     */
+    private boolean isHideNotch(Context activity) {
+       return Settings.Global.getInt(activity.getContentResolver(),
+               "force_black", 0) == 1;
     }
 }

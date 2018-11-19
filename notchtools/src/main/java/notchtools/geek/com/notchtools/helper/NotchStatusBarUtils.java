@@ -24,18 +24,12 @@ public class NotchStatusBarUtils {
         if (statusBarHeight != -1) {
             return statusBarHeight;
         }
-        int resourceId = context.getResources().getIdentifier("notch_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
-        }
-
         if (statusBarHeight <= 0) {
             int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resId > 0) {
                 statusBarHeight = context.getResources().getDimensionPixelSize(resId);
             }
         }
-
         return statusBarHeight;
     }
 
