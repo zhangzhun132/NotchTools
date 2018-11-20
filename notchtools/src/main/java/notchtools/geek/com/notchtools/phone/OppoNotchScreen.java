@@ -7,6 +7,7 @@ import android.view.Window;
 
 import notchtools.geek.com.notchtools.core.AbsNotchScreenSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
+import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
 /**
  * https://open.oppomobile.com/service/message/detail?id=61876
@@ -29,12 +30,11 @@ public class OppoNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int getNotchHeight(Window window) {
-        int statusBarHeight = 0;
-        int resourceId = window.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = window.getContext().getResources().getDimensionPixelSize(resourceId);
+        if (!isNotchScreen(window)) {
+            return 0;
         }
-        return statusBarHeight ;
+
+        return NotchStatusBarUtils.getStatusBarHeight(window.getContext());
     }
 
     /**

@@ -2,11 +2,13 @@ package notchtools.geek.com.notchtools;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.view.Window;
 
 import notchtools.geek.com.notchtools.core.INotchSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 import notchtools.geek.com.notchtools.helper.DeviceBrandTools;
+import notchtools.geek.com.notchtools.helper.ThreadUtils;
 import notchtools.geek.com.notchtools.phone.CommonScreen;
 import notchtools.geek.com.notchtools.phone.HuaWeiNotchScreen;
 import notchtools.geek.com.notchtools.phone.MiuiNotchScreen;
@@ -32,7 +34,7 @@ import notchtools.geek.com.notchtools.phone.VivoNotchScreen;
  *
  * 对于需要下移刘海高度的操作情况：
  * 1、全屏且占用刘海高度：可以在{@link OnNotchCallBack}的onCallback方法根据状态栏高度做下移适配
- * 2、全屏但不占用刘海高度，目前只有oppo刘海需要下移，可以在{@link OnNotchCallBack}的needAddFakeNotchStatusBar方法中做处理
+ * 2、全屏但不占用刘海高度，目前只有oppo、vivo刘海需要下移，可以在{@link OnNotchCallBack}的needAddFakeNotchStatusBar方法中做处理
  *
  * @author zhangzhun
  * @date 2018/11/4
@@ -110,13 +112,19 @@ public class NotchTools {
     /**
      * 全屏显示，但是不占用刘海屏区域（在刘海的下方显示内容）
      */
-    public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        if (notchScreenSupport == null) {
-            checkScreenSupportInit(activity.getWindow());
-        }
-        if (notchScreenSupport != null) {
-            notchScreenSupport.fullScreenDontUseStatus(activity, notchCallBack);
-        }
+    public void fullScreenDontUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
+        ThreadUtils.post2UI(new Runnable() {
+            @Override
+            public void run() {
+                if (notchScreenSupport == null) {
+                    checkScreenSupportInit(activity.getWindow());
+                }
+                if (notchScreenSupport != null) {
+                    notchScreenSupport.fullScreenDontUseStatus(activity, notchCallBack);
+                }
+            }
+        });
+
     }
 
     /**
@@ -126,34 +134,53 @@ public class NotchTools {
         fullScreenUseStatus(activity, null);
     }
 
-    public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        if (notchScreenSupport == null) {
-            checkScreenSupportInit(activity.getWindow());
-        }
-        if (notchScreenSupport != null) {
-            notchScreenSupport.fullScreenUseStatus(activity, notchCallBack);
-        }
+    public void fullScreenUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
+        ThreadUtils.post2UI(new Runnable() {
+            @Override
+            public void run() {
+                if (notchScreenSupport == null) {
+                    checkScreenSupportInit(activity.getWindow());
+                }
+                if (notchScreenSupport != null) {
+                    notchScreenSupport.fullScreenUseStatus(activity, notchCallBack);
+                }
+            }
+        });
+
     }
 
-    @TargetApi(28)
     private void checkScreenSupportInit(Window window) {
-        if (notchScreenSupport == null) {
-            if (CURRENT_SDK < VERSION_P) {
-                DeviceBrandTools deviceBrandTools = DeviceBrandTools.getInstance();
-                if (deviceBrandTools.isHuaWei()) {
-                    notchScreenSupport = new HuaWeiNotchScreen();
-                } else if (deviceBrandTools.isMiui()) {
-                    notchScreenSupport = new MiuiNotchScreen();
-                } else if (deviceBrandTools.isVivo()) {
-                    notchScreenSupport = new VivoNotchScreen();
-                } else if (deviceBrandTools.isOppo()) {
-                    notchScreenSupport = new OppoNotchScreen();
-                } else {
-                    notchScreenSupport = new CommonScreen();
-                }
+        if (notchScreenSupport != null) {
+          return;
+        }
+
+        //小于O版本的，采用通用处理方案
+        if (CURRENT_SDK < Build.VERSION_CODES.O) {
+            notchScreenSupport = new CommonScreen();
+            return;
+        }
+
+        //O版本的机型，进行刘海屏相关处理
+        if (CURRENT_SDK == Build.VERSION_CODES.O) {
+            DeviceBrandTools deviceBrandTools = DeviceBrandTools.getInstance();
+            if (deviceBrandTools.isHuaWei()) {
+                notchScreenSupport = new HuaWeiNotchScreen();
+            } else if (deviceBrandTools.isMiui()) {
+                notchScreenSupport = new MiuiNotchScreen();
+            } else if (deviceBrandTools.isVivo()) {
+                notchScreenSupport = new VivoNotchScreen();
+            } else if (deviceBrandTools.isOppo()) {
+                notchScreenSupport = new OppoNotchScreen();
             } else {
-                notchScreenSupport = new PVersionNotchScreen();
+                notchScreenSupport = new CommonScreen();
             }
+            return;
+        }
+
+        //O以上版本，单独处理
+        if (CURRENT_SDK > Build.VERSION_CODES.O) {
+            notchScreenSupport = new PVersionNotchScreen();
+            return;
         }
     }
 

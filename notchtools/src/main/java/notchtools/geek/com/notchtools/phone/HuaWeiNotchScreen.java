@@ -54,6 +54,9 @@ public class HuaWeiNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int getNotchHeight(Window window) {
+        if (!isNotchScreen(window)) {
+            return 0;
+        }
         int[] ret = new int[]{0, 0};
         try {
             ClassLoader cl = window.getContext().getClassLoader();

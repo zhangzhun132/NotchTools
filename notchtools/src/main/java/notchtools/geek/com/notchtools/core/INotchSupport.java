@@ -25,6 +25,14 @@ public interface INotchSupport {
     int getNotchHeight(Window window);
 
     /**
+     * 获取状态栏的高度
+     * 新增此方法，与状态栏高度完全区分
+     * @param window
+     * @return
+     */
+    int getStatusHeight(Window window);
+
+    /**
      * 隐藏状态栏，全屏状态下，但不使用状态栏区域
      * @param activity
      */

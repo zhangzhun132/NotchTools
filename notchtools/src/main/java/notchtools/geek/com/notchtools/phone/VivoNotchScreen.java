@@ -52,6 +52,10 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int getNotchHeight(Window window) {
+        if (!isNotchScreen(window)) {
+            return 0;
+        }
+
         return NotchStatusBarUtils.getStatusBarHeight(window.getContext());
     }
 

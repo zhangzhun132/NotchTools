@@ -31,6 +31,10 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int getNotchHeight(Window window) {
+        if (!isNotchScreen(window)) {
+            return 0;
+        }
+
         int result = 0;
         if (window == null) {
             return 0;

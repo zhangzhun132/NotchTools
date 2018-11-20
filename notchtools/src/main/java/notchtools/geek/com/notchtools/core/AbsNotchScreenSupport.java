@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
@@ -14,6 +15,11 @@ import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
  */
 
 public abstract class AbsNotchScreenSupport implements INotchSupport {
+
+    @Override
+    public int getStatusHeight(Window window) {
+        return NotchStatusBarUtils.getStatusBarHeight(window.getContext());
+    }
 
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {

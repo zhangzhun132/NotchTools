@@ -21,7 +21,7 @@ public class CommonScreen extends AbsNotchScreenSupport {
 
     @Override
     public int getNotchHeight(Window window) {
-        return NotchStatusBarUtils.getStatusBarHeight(window.getContext());
+        return 0;
     }
 
     @Override
