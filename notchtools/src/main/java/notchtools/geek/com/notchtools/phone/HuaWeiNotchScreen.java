@@ -2,7 +2,9 @@ package notchtools.geek.com.notchtools.phone;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Window;
@@ -22,6 +24,8 @@ import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 public class HuaWeiNotchScreen extends AbsNotchScreenSupport {
 
     private static final String TAG = HuaWeiNotchScreen.class.getSimpleName();
+    private static final String DISPLAY_NOTCH_STATUS = "display_notch_status";
+
     /**
      * 刘海屏全屏显示FLAG
      */
@@ -128,5 +132,15 @@ public class HuaWeiNotchScreen extends AbsNotchScreenSupport {
         } catch (Exception e) {
             Log.e("test", "other Exception");
         }
+    }
+
+    /**
+     * 获取默认和隐藏刘海区开关值接口
+     * @param context
+     * @return
+     */
+    private boolean isHideNotch(Context context) {
+        int isNotchSwitchOpen = Settings.Secure.getInt(context.getContentResolver(), DISPLAY_NOTCH_STATUS, 0);
+        return isNotchSwitchOpen == 1;
     }
 }

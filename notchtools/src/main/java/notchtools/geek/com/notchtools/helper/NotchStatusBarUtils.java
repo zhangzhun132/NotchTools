@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 /**
  * @author zhangzhun
@@ -40,6 +41,11 @@ public class NotchStatusBarUtils {
      */
     public static void setFullScreenWithSystemUi(final Window window, boolean setListener) {
         int systemUiVisibility = 0;
+        //setAttributes防止弹出DialogFragment时会出现页面抖动
+        WindowManager.LayoutParams attrs = window.getAttributes();
+        attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        window.setAttributes(attrs);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

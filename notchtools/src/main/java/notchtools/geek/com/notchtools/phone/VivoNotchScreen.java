@@ -1,7 +1,9 @@
 package notchtools.geek.com.notchtools.phone;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.view.Window;
 import java.lang.reflect.InvocationTargetException;
@@ -28,38 +30,23 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
         if (window == null) {
             return false;
         }
-        if (mClass == null) {
-            ClassLoader classLoader = window.getContext().getClassLoader();
-            try {
-                mClass = classLoader.loadClass("android.util.FtFeature");
-                mMethod = mClass.getMethod("isFeatureSupport", Integer.TYPE);
-                return (boolean) mMethod.invoke(mClass, 0x00000020);
-            } catch (ClassNotFoundException e) {
-                return false;
-            } catch (NoSuchMethodException e) {
-                return false;
-            } catch (IllegalAccessException e) {
-                return false;
-            } catch (InvocationTargetException e) {
-                return false;
-            }
-        } else {
-            if (mMethod == null) {
-                try {
-                    mMethod = mClass.getMethod("isFeatureSupport", Integer.TYPE);
-                } catch (NoSuchMethodException e) {
-                    return false;
-                }
-                try {
-                    return (boolean) mMethod.invoke(mClass, 0x00000020);
-                } catch (IllegalAccessException e) {
-                    return false;
-                } catch (InvocationTargetException e) {
-                    return false;
-                }
-            }
+        boolean isNotchScreen = false;
+        ClassLoader classLoader = window.getContext().getClassLoader();
+        try {
+            mClass = classLoader.loadClass("android.util.FtFeature");
+            mMethod = mClass.getMethod("isFeatureSupport", Integer.TYPE);
+            isNotchScreen =  (boolean) mMethod.invoke(mClass, 0x00000020);
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (NoSuchMethodException e) {
+            return false;
+        } catch (IllegalAccessException e) {
+            return false;
+        } catch (InvocationTargetException e) {
+            return false;
+        } finally {
+            return isNotchScreen;
         }
-        return false;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -69,7 +56,12 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
     }
 
     /**
-     * vivo手机没对刘海做出适配方案，不管怎么样，全屏永远是不占用刘海
+     * vivo手机没对刘海做出适配方案
+     * 在设置里的第三方应用显示比例中，有两种显示模式:
+     * 1、安全区域显示
+     * 2、全屏显示
+     * 这两种模式目前没有方法可供开发者判断，所以在适配时会有差异
+     * 尤其是在安全区域显示时的全屏占用刘海的情况下。
      * @param activity
      * @param notchCallBack
      */
@@ -77,17 +69,26 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenDontUseStatus(activity, notchCallBack);
+        if (isNotchScreen(activity.getWindow())) {
+            if (notchCallBack != null && isNotchScreen(activity.getWindow())) {
+                notchCallBack.onNeedAddNotchStatusBar(true);
+            }
+        }
     }
 
     /**
-     * vivo手机没对刘海做出适配方案，不管怎么样，全屏永远是不占用刘海
-     * 所以全屏不占用刘海情况下，MarginTop就设为0即可
+     * vivo手机没对刘海做出适配方案
+     * 在设置里的第三方应用显示比例中，有两种显示模式:
+     * 1、安全区域显示
+     * 2、全屏显示
+     * 这两种模式目前没有方法可供开发者判断，所以在适配时会有差异
+     * 尤其是在安全区域显示时的全屏占用刘海的情况下。
      * @param activity
      * @param notchCallBack
      */
     @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        onBindCallBackWithNotchProperty(activity, 0, notchCallBack);
-        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
+        super.fullScreenUseStatus(activity, notchCallBack);
     }
+
 }
