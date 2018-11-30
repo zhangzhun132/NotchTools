@@ -10,7 +10,7 @@ import notchtools.geek.com.notchtools.NotchTools;
 import notchtools.geek.com.notchtools.core.NotchProperty;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 
-public class FullScreenUseNotchActivity extends BaseActivity {
+public class FullScreenUseNotchActivity extends BaseActivity implements OnNotchCallBack {
 
     private ImageView mBackView;
 
@@ -25,19 +25,15 @@ public class FullScreenUseNotchActivity extends BaseActivity {
                 finish();
             }
         });
-        NotchTools.getFullScreenTools().fullScreenUseStatus(this, new OnNotchCallBack() {
-            @Override
-            public void onNotchPropertyCallback(NotchProperty notchProperty) {
-                int marginTop = notchProperty.getMarginTop();
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackView.getLayoutParams();
-                layoutParams.topMargin += marginTop;
-                mBackView.setLayoutParams(layoutParams);
-            }
-
-            @Override
-            public void onNeedAddNotchStatusBar(boolean needAddNocth) {
-
-            }
-        });
+        NotchTools.getFullScreenTools().fullScreenUseStatus(this, this);
     }
+
+    @Override
+    public void onNotchPropertyCallback(NotchProperty notchProperty) {
+        int marginTop = notchProperty.getMarginTop();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackView.getLayoutParams();
+        layoutParams.topMargin += marginTop;
+        mBackView.setLayoutParams(layoutParams);
+    }
+
 }

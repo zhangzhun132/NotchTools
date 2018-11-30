@@ -1,13 +1,10 @@
 package com.geek.notchtools;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import notchtools.geek.com.notchtools.NotchTools;
-import notchtools.geek.com.notchtools.core.NotchProperty;
-import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 
 public class FullScreenNoUseNotchActivity extends BaseActivity {
 
@@ -24,18 +21,7 @@ public class FullScreenNoUseNotchActivity extends BaseActivity {
                 finish();
             }
         });
-        NotchTools.getFullScreenTools().fullScreenDontUseStatus(this, new OnNotchCallBack() {
-            @Override
-            public void onNotchPropertyCallback(NotchProperty notchProperty) {
-
-            }
-
-            @Override
-            public void onNeedAddNotchStatusBar(boolean needAddNocth) {
-                if (needAddNocth) {
-                    setFakeNotchView();
-                }
-            }
-        });
+        NotchTools.getFullScreenTools().fullScreenDontUseStatusForPortrait(this);
     }
+
 }
