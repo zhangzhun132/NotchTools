@@ -1,11 +1,14 @@
 package notchtools.geek.com.notchtools.helper;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+
+import notchtools.geek.com.notchtools.NotchTools;
 
 /**
  * @author zhangzhun
@@ -69,6 +72,46 @@ public class NotchStatusBarUtils {
                 }
             });
         }
+    }
+
+
+    /**
+     * 全屏SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN下刘海屏适配需要
+     */
+    public static void setFakeNotchView(Window window) {
+        ViewGroup notchContainer = removeFakeNotchView(window);
+        if (notchContainer == null) {
+            return;
+        }
+        View view = new View(window.getContext());
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                NotchTools.getFullScreenTools().getNotchHeight(window)));
+        view.setBackgroundColor(Color.BLACK);
+        notchContainer.addView(view);
+    }
+
+    /**
+     * 全屏SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN下刘海屏适配需要
+     */
+    public static ViewGroup removeFakeNotchView(Window window) {
+        ViewGroup notchContainer = getNotchContainer(window);
+        if (notchContainer == null) {
+            return null;
+        }
+        int childCount = notchContainer.getChildCount();
+        if (childCount > 0) {
+            notchContainer.removeAllViews();
+        }
+        return notchContainer;
+    }
+
+    public static ViewGroup getNotchContainer(Window window) {
+
+        View decorView = window.getDecorView();
+        if (decorView == null) {
+            return null;
+        }
+        return decorView.findViewWithTag(NotchTools.NOTCH_CONTAINER);
     }
 
 }

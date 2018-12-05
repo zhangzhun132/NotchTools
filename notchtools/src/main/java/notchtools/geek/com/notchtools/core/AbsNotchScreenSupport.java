@@ -1,11 +1,14 @@
 package notchtools.geek.com.notchtools.core;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import notchtools.geek.com.notchtools.NotchTools;
+import notchtools.geek.com.notchtools.R;
 import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
 
@@ -28,11 +31,20 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
     }
 
     @Override
+    public void fullScreenDontUseStatusForPortrait(Activity activity, OnNotchCallBack notchCallBack) {
+        fullScreenDontUseStatus(activity, notchCallBack);
+    }
+
+    @Override
+    public void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack) {
+        fullScreenDontUseStatus(activity, notchCallBack);
+    }
+
+    @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         onBindCallBackWithNotchProperty(activity, getNotchHeight(activity.getWindow()), notchCallBack);
         NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
     }
-
 
     protected void onBindCallBackWithNotchProperty(Activity activity, OnNotchCallBack notchCallBack) {
         if (notchCallBack != null) {
@@ -56,5 +68,4 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
             }
         }
     }
-
 }

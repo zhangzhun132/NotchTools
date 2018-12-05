@@ -47,9 +47,32 @@ public class OppoNotchScreen extends AbsNotchScreenSupport {
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenDontUseStatus(activity, notchCallBack);
         if (isNotchScreen(activity.getWindow())) {
-            if (notchCallBack != null && isNotchScreen(activity.getWindow())) {
-                notchCallBack.onNeedAddNotchStatusBar(true);
-            }
+            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+        }
+    }
+
+    /**
+     * 竖屏下与fullScreenDontUseStatus保持一致
+     * @param activity
+     * @param notchCallBack
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void fullScreenDontUseStatusForPortrait(Activity activity, OnNotchCallBack notchCallBack) {
+        fullScreenDontUseStatus(activity, notchCallBack);
+    }
+
+    /**
+     * 横屏下需要把NotchStatusBar隐藏掉，否则有可能会出现横屏上方有条黑边
+     * @param activity
+     * @param notchCallBack
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack) {
+        super.fullScreenDontUseStatusForLandscape(activity, notchCallBack);
+        if (isNotchScreen(activity.getWindow())) {
+            NotchStatusBarUtils.removeFakeNotchView(activity.getWindow());
         }
     }
 

@@ -1,6 +1,7 @@
 package notchtools.geek.com.notchtools.core;
 
 /**
+ * 刘海适配回调接口
  * @author zhangzhun
  * @date 2018/11/7
  */
@@ -13,9 +14,4 @@ public interface OnNotchCallBack {
      */
     void onNotchPropertyCallback(NotchProperty notchProperty);
 
-    /**
-     * 是否需要下移布局
-     * @param needAddNocth
-     */
-    void onNeedAddNotchStatusBar(boolean needAddNocth);
 }

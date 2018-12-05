@@ -39,6 +39,20 @@ public interface INotchSupport {
     void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack);
 
     /**
+     * 竖屏下隐藏状态栏，全屏状态下且不占用刘海屏区域
+     * @param activity
+     * @param notchCallBack
+     */
+    void fullScreenDontUseStatusForPortrait(Activity activity, OnNotchCallBack notchCallBack);
+
+    /**
+     * 横屏下隐藏状态栏，全屏状态下且不占用刘海屏区域
+     * @param activity
+     * @param notchCallBack
+     */
+    void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack);
+
+    /**
      * 隐藏状态栏，全屏状态下，使用状态栏区域
      * @param activity
      */
