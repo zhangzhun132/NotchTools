@@ -24,4 +24,15 @@ public class FullScreenNoUseNotchActivity extends BaseActivity {
         NotchTools.getFullScreenTools().fullScreenDontUseStatusForPortrait(this);
     }
 
+    /**
+     * onWindowFocusChanged最好也进行全屏适配，防止失去焦点又重回焦点时的flag不正确。
+     * @param hasFocus
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            NotchTools.getFullScreenTools().fullScreenDontUseStatusForPortrait(this);
+        }
+        super.onWindowFocusChanged(hasFocus);
+    }
 }
