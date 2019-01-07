@@ -59,21 +59,18 @@ public class PVersionNotchScreen extends AbsNotchScreenSupport {
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenDontUseStatus(activity, notchCallBack);
-        if (isNotchScreen(activity.getWindow())) {
-            WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
-            attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
-            activity.getWindow().setAttributes(attributes);
-        }
+        WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
+        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        activity.getWindow().setAttributes(attributes);
+        NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
     }
 
     @RequiresApi(api = 28)
     @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenUseStatus(activity, notchCallBack);
-        if (isNotchScreen(activity.getWindow())) {
-            WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
-            attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-            activity.getWindow().setAttributes(attributes);
-        }
+        WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
+        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        activity.getWindow().setAttributes(attributes);
     }
 }

@@ -18,6 +18,7 @@ import notchtools.geek.com.notchtools.NotchTools;
 public class NotchStatusBarUtils {
 
     private static int statusBarHeight = -1;
+    public static boolean sShowNavigation;
 
     /**
      * 获取状态栏高度
@@ -51,10 +52,11 @@ public class NotchStatusBarUtils {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            if (!sShowNavigation) {
+                systemUiVisibility |=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -26,8 +26,8 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
 
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
+        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), false);
         onBindCallBackWithNotchProperty(activity, notchCallBack);
-        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
     }
 
     @Override
@@ -42,8 +42,8 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
 
     @Override
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
+        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), false);
         onBindCallBackWithNotchProperty(activity, getNotchHeight(activity.getWindow()), notchCallBack);
-        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), true);
     }
 
     protected void onBindCallBackWithNotchProperty(Activity activity, OnNotchCallBack notchCallBack) {

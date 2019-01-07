@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NotchTools.iml" filepath="$PROJECT_DIR$/NotchTools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NotchTools.iml" filepath="$PROJECT_DIR$/NotchTools.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notchtools/notchtools.iml" filepath="$PROJECT_DIR$/notchtools/notchtools.iml" />
       <module fileurl="file://$PROJECT_DIR$/notchtools/notchtools.iml" filepath="$PROJECT_DIR$/notchtools/notchtools.iml" />
     </modules>
   </component>

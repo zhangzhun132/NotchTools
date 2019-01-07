@@ -122,6 +122,17 @@ public class NotchTools implements INotchSupport{
     }
 
     /**
+     * 是否显示底部导航栏
+     * @return
+     */
+    public NotchTools showNavigation(boolean showNavigation) {
+        NotchStatusBarUtils.sShowNavigation = showNavigation;
+        return this;
+    }
+
+
+
+    /**
      * 全屏显示，但是不占用刘海屏区域（在刘海的下方显示内容）
      */
     public void fullScreenDontUseStatus(Activity activity) {
@@ -133,17 +144,12 @@ public class NotchTools implements INotchSupport{
      */
     @Override
     public void fullScreenDontUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
-        ThreadUtils.post2UI(new Runnable() {
-            @Override
-            public void run() {
-                if (notchScreenSupport == null) {
-                    checkScreenSupportInit(activity.getWindow());
-                }
-                if (notchScreenSupport != null) {
-                    notchScreenSupport.fullScreenDontUseStatus(activity, notchCallBack);
-                }
-            }
-        });
+        if (notchScreenSupport == null) {
+            checkScreenSupportInit(activity.getWindow());
+        }
+        if (notchScreenSupport != null) {
+            notchScreenSupport.fullScreenDontUseStatus(activity, notchCallBack);
+        }
     }
 
     public void fullScreenDontUseStatusForPortrait(Activity activity) {
@@ -183,17 +189,12 @@ public class NotchTools implements INotchSupport{
 
     @Override
     public void fullScreenUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
-        ThreadUtils.post2UI(new Runnable() {
-            @Override
-            public void run() {
-                if (notchScreenSupport == null) {
-                    checkScreenSupportInit(activity.getWindow());
-                }
-                if (notchScreenSupport != null) {
-                    notchScreenSupport.fullScreenUseStatus(activity, notchCallBack);
-                }
-            }
-        });
+        if (notchScreenSupport == null) {
+            checkScreenSupportInit(activity.getWindow());
+        }
+        if (notchScreenSupport != null) {
+            notchScreenSupport.fullScreenUseStatus(activity, notchCallBack);
+        }
 
     }
 
