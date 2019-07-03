@@ -25,7 +25,7 @@ public class FullScreenUseNotchActivity extends BaseActivity implements OnNotchC
                 finish();
             }
         });
-        NotchTools.getFullScreenTools().fullScreenUseStatus(this, this);
+        NotchTools.getFullScreenTools().fullScreenUseStatusForActivityOnCreate(this, this);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class FullScreenUseNotchActivity extends BaseActivity implements OnNotchC
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            NotchTools.getFullScreenTools().fullScreenUseStatus(this);
+            NotchTools.getFullScreenTools().fullScreenUseStatusForOnWindowFocusChanged(this);
         }
         super.onWindowFocusChanged(hasFocus);
     }

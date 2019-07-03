@@ -1,9 +1,7 @@
 package notchtools.geek.com.notchtools.phone;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.view.Window;
 import java.lang.reflect.InvocationTargetException;

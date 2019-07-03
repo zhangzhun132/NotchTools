@@ -12,7 +12,7 @@ public class SystemProperties {
 
     private static final String TAG = SystemProperties.class.getSimpleName();
 
-    private static  Method getStringProperty;
+    private static Method getStringProperty;
     private static  SystemProperties sSystemProperties;
 
     public static SystemProperties getInstance() {

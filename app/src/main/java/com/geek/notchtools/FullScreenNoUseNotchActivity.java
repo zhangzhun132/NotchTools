@@ -21,7 +21,7 @@ public class FullScreenNoUseNotchActivity extends BaseActivity {
                 finish();
             }
         });
-        NotchTools.getFullScreenTools().fullScreenDontUseStatusForPortrait(this);
+        NotchTools.getFullScreenTools().fullScreenDontUseStatusForActivityOnCreate(this);
     }
 
     /**
@@ -31,7 +31,7 @@ public class FullScreenNoUseNotchActivity extends BaseActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            NotchTools.getFullScreenTools().fullScreenDontUseStatusForPortrait(this);
+            NotchTools.getFullScreenTools().fullScreenDontUseStatusForOnWindowFocusChanged(this);
         }
         super.onWindowFocusChanged(hasFocus);
     }

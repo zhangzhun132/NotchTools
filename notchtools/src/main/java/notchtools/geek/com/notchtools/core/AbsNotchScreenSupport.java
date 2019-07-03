@@ -1,14 +1,8 @@
 package notchtools.geek.com.notchtools.core;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 
-import notchtools.geek.com.notchtools.NotchTools;
-import notchtools.geek.com.notchtools.R;
 import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
 
@@ -44,6 +38,17 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
     public void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), false);
         onBindCallBackWithNotchProperty(activity, getNotchHeight(activity.getWindow()), notchCallBack);
+    }
+
+    @Override
+    public void translucentStatusBar(Activity activity) {
+        translucentStatusBar(activity, null);
+    }
+
+    @Override
+    public void translucentStatusBar(Activity activity, OnNotchCallBack onNotchCallBack) {
+        NotchStatusBarUtils.removeFakeNotchView(activity.getWindow());
+        NotchStatusBarUtils.setStatusBarTransparent(activity.getWindow(), onNotchCallBack);
     }
 
     protected void onBindCallBackWithNotchProperty(Activity activity, OnNotchCallBack notchCallBack) {

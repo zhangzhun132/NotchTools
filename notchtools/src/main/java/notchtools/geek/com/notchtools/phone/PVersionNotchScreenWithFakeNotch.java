@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import notchtools.geek.com.notchtools.core.AbsNotchScreenSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
+import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
 /**
  * targetApi>=28才能使用API，有的手机厂商在P上会放弃O适配方案，暂时针对P手机不做特殊处理
@@ -16,7 +17,7 @@ import notchtools.geek.com.notchtools.core.OnNotchCallBack;
  * @date 2018/11/5
  */
 
-public class PVersionNotchScreen extends AbsNotchScreenSupport {
+public class PVersionNotchScreenWithFakeNotch extends AbsNotchScreenSupport {
 
     @RequiresApi(api = 28)
     @Override
@@ -61,8 +62,9 @@ public class PVersionNotchScreen extends AbsNotchScreenSupport {
             return;
         }
         WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
-        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
+        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         activity.getWindow().setAttributes(attributes);
+        NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
     }
 
     @RequiresApi(api = 28)

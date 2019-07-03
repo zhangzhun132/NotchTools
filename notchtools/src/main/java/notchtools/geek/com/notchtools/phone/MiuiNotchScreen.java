@@ -13,6 +13,7 @@ import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 import notchtools.geek.com.notchtools.helper.SystemProperties;
 
+
 /**
  * https://dev.mi.com/console/doc/detail?pId=1293
  * @author zhangzhun
@@ -49,10 +50,12 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
     }
 
     private int getRealNotchHeight(Context context) {
-        int result = 0;
+        int result;
         int resourceId = context.getResources().getIdentifier("notch_height", "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
+        } else {
+            result = NotchStatusBarUtils.getStatusBarHeight(context);
         }
         return result;
     }
@@ -66,19 +69,9 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        super.fullScreenDontUseStatus(activity, notchCallBack);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isNotchScreen(activity.getWindow())) {
-            //开启配置
-            int FLAG_NOTCH = 0x00000100 | 0x00000400;
-            try {
-                Method method = Window.class.getMethod("addExtraFlags", int.class);
-                if (!method.isAccessible()) {
-                    method.setAccessible(true);
-                }
-                method.invoke(activity.getWindow(), FLAG_NOTCH);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        this.fullScreenUseStatus(activity, notchCallBack);
+        if (isNotchScreen(activity.getWindow())) {
+            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
         }
     }
 
@@ -114,6 +107,7 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
      * @param activity
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private boolean isHideNotch(Context activity) {
        return Settings.Global.getInt(activity.getContentResolver(),
                "force_black", 0) == 1;

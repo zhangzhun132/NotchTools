@@ -11,7 +11,7 @@ public class NotchProperty {
     /**
      * 刘海高度
      */
-    private int mHeight;
+    private int mNotchHeight;
 
     /**
      * 是否是刘海屏
@@ -25,12 +25,22 @@ public class NotchProperty {
      */
     private int mMarginTop;
 
+    private int mStatusBarHeight;
+
+    public int getStatusBarHeight() {
+        return mStatusBarHeight;
+    }
+
+    public void setStatusBarHeight(int statusBarHeight) {
+        this.mStatusBarHeight = statusBarHeight;
+    }
+
     public int geNotchHeight() {
-        return mHeight;
+        return mNotchHeight;
     }
 
     public void setNotchHeight(int mHeight) {
-        this.mHeight = mHeight;
+        this.mNotchHeight = mHeight;
     }
 
     public boolean isNotch() {

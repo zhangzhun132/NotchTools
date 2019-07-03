@@ -58,4 +58,17 @@ public interface INotchSupport {
      */
     void fullScreenUseStatus(Activity activity, OnNotchCallBack notchCallBack);
 
+    /**
+     * 透明状态栏
+     * @param activity
+     */
+    void translucentStatusBar(Activity activity);
+
+    /**
+     * 带回调的透明状态栏
+     * @param activity
+     * @param onNotchCallBack
+     */
+    void translucentStatusBar(Activity activity, OnNotchCallBack onNotchCallBack);
+
 }

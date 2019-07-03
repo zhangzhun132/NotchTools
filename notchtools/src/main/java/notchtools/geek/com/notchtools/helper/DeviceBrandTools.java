@@ -25,7 +25,9 @@ public class DeviceBrandTools {
     public final boolean isHuaWei() {
         String manufacturer = Build.MANUFACTURER;
         if (!TextUtils.isEmpty(manufacturer)){
-            if (manufacturer.contains("HUAWEI")) return true;
+            if (manufacturer.contains("HUAWEI")) {
+                return true;
+            }
         }
         return false;
     }
@@ -39,8 +41,8 @@ public class DeviceBrandTools {
     }
 
     public final boolean isOppo() {
-        String manufacturer = getSystemProperty("ro.product.brand");
-        if (!TextUtils.isEmpty(manufacturer)){
+        String manufacturer = Build.MANUFACTURER;
+        if("oppo".equalsIgnoreCase(manufacturer)){
             return true;
         }
         return false;
@@ -54,7 +56,15 @@ public class DeviceBrandTools {
         return false;
     }
 
-    private  String getSystemProperty(String propName) {
+    public final boolean isSamsung() {
+        String manufacturer = Build.MANUFACTURER;
+        if("samsung".equalsIgnoreCase(manufacturer)){
+            return true;
+        }
+        return false;
+    }
+
+    private String getSystemProperty(String propName) {
         return SystemProperties.getInstance().get(propName);
     }
 }

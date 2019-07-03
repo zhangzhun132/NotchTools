@@ -5,7 +5,6 @@ import android.view.Window;
 
 import notchtools.geek.com.notchtools.core.AbsNotchScreenSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
-import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
 
 /**
  * @author zhangzhun

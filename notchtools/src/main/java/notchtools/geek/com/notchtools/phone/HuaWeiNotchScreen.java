@@ -15,6 +15,8 @@ import java.lang.reflect.Method;
 
 import notchtools.geek.com.notchtools.core.AbsNotchScreenSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
+import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
+
 
 /**
  * https://devcenter-test.huawei.com/consumer/cn/devservice/doc/50114
@@ -74,9 +76,9 @@ public class HuaWeiNotchScreen extends AbsNotchScreenSupport {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
-        super.fullScreenDontUseStatus(activity, notchCallBack);
+        this.fullScreenUseStatus(activity, notchCallBack);
         if (isNotchScreen(activity.getWindow())) {
-            setNotFullScreenWindowLayoutInDisplayCutout(activity.getWindow());
+            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
         }
     }
 

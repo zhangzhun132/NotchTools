@@ -1,20 +1,22 @@
 package notchtools.geek.com.notchtools;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Build;
+import android.view.View;
 import android.view.Window;
 
 import notchtools.geek.com.notchtools.core.INotchSupport;
 import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 import notchtools.geek.com.notchtools.helper.DeviceBrandTools;
 import notchtools.geek.com.notchtools.helper.NotchStatusBarUtils;
-import notchtools.geek.com.notchtools.helper.ThreadUtils;
 import notchtools.geek.com.notchtools.phone.CommonScreen;
 import notchtools.geek.com.notchtools.phone.HuaWeiNotchScreen;
 import notchtools.geek.com.notchtools.phone.MiuiNotchScreen;
 import notchtools.geek.com.notchtools.phone.OppoNotchScreen;
 import notchtools.geek.com.notchtools.phone.PVersionNotchScreen;
+import notchtools.geek.com.notchtools.phone.PVersionNotchScreenWithFakeNotch;
+import notchtools.geek.com.notchtools.phone.SamsungPunchHoleScreen;
 import notchtools.geek.com.notchtools.phone.VivoNotchScreen;
 
 /**
@@ -42,15 +44,19 @@ import notchtools.geek.com.notchtools.phone.VivoNotchScreen;
  * @author zhangzhun
  * @date 2018/11/4
  */
-public class NotchTools implements INotchSupport{
+public class NotchTools  {
 
     private static NotchTools sFullScreenTolls;
 
     /**
-     * 刘海的容器的Tag
+     * notchbar的容器的Tag
      */
     public static final String NOTCH_CONTAINER = "notch_container";
-    private static final int CURRENT_SDK = android.os.Build.VERSION.SDK_INT;
+    /**
+     * toolbar的容器的Tag
+     */
+    public static final String TOOLBAR_CONTAINER = "toolbar_container";
+    private static final int CURRENT_SDK = Build.VERSION.SDK_INT;
     /**
      * Android P版本号
      */
@@ -61,6 +67,7 @@ public class NotchTools implements INotchSupport{
 
 
     public static NotchTools getFullScreenTools() {
+        NotchStatusBarUtils.sShowNavigation = true;
         if (sFullScreenTolls == null) {
             synchronized (NotchTools.class) {
                 if (sFullScreenTolls == null) {
@@ -81,7 +88,6 @@ public class NotchTools implements INotchSupport{
      * @param Window the window
      * @return the boolean
      */
-    @Override
     public boolean isNotchScreen(Window Window) {
         if (!mHasJudge) {
             if (notchScreenSupport == null) {
@@ -100,7 +106,6 @@ public class NotchTools implements INotchSupport{
     /**
      * 获取刘海屏的高度
      */
-    @Override
     public int getNotchHeight(Window window) {
         if (notchScreenSupport == null) {
             checkScreenSupportInit(window);
@@ -116,7 +121,6 @@ public class NotchTools implements INotchSupport{
      * @param window
      * @return
      */
-    @Override
     public int getStatusHeight(Window window) {
         return NotchStatusBarUtils.getStatusBarHeight(window.getContext());
     }
@@ -130,7 +134,37 @@ public class NotchTools implements INotchSupport{
         return this;
     }
 
+    public void fullScreenDontUseStatusForActivityOnCreate(final Activity activity) {
+        activity.getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                fullScreenDontUseStatus(activity);
+            }
 
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
+    }
+
+    public void fullScreenDontUseStatusForActivityOnCreate(final Activity activity,  final OnNotchCallBack notchCallBack) {
+        activity.getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                fullScreenDontUseStatus(activity, notchCallBack);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
+    }
+
+    public void fullScreenDontUseStatusForOnWindowFocusChanged(final Activity activity) {
+        fullScreenDontUseStatus(activity);
+    }
 
     /**
      * 全屏显示，但是不占用刘海屏区域（在刘海的下方显示内容）
@@ -142,42 +176,51 @@ public class NotchTools implements INotchSupport{
     /**
      * 全屏显示，但是不占用刘海屏区域（在刘海的下方显示内容）
      */
-    @Override
     public void fullScreenDontUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
         if (notchScreenSupport == null) {
             checkScreenSupportInit(activity.getWindow());
         }
-        if (notchScreenSupport != null) {
-            notchScreenSupport.fullScreenDontUseStatus(activity, notchCallBack);
+        if (notchScreenSupport == null) {
+            return;
+        }
+
+        if (isPortrait(activity)) {
+            notchScreenSupport.fullScreenDontUseStatusForPortrait(activity, notchCallBack);
+        } else {
+            notchScreenSupport.fullScreenDontUseStatusForLandscape(activity, notchCallBack);
         }
     }
 
-    public void fullScreenDontUseStatusForPortrait(Activity activity) {
-        fullScreenDontUseStatusForPortrait(activity, null);
-    }
-
-    @Override
-    public void fullScreenDontUseStatusForPortrait(Activity activity, OnNotchCallBack notchCallBack) {
-        fullScreenDontUseStatus(activity, notchCallBack);
-    }
-
-    public void fullScreenDontUseStatusForLandscape(final Activity activity) {
-        fullScreenDontUseStatusForLandscape(activity, null);
-    }
-
-    @Override
-    public void fullScreenDontUseStatusForLandscape(final Activity activity, final OnNotchCallBack notchCallBack) {
-        ThreadUtils.post2UI(new Runnable() {
+    public void fullScreenUseStatusForActivityOnCreate(final Activity activity) {
+        activity.getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
-            public void run() {
-                if (notchScreenSupport == null) {
-                    checkScreenSupportInit(activity.getWindow());
-                }
-                if (notchScreenSupport != null) {
-                    notchScreenSupport.fullScreenDontUseStatusForLandscape(activity, notchCallBack);
-                }
+            public void onViewAttachedToWindow(View v) {
+                fullScreenUseStatus(activity);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
             }
         });
+    }
+
+    public void fullScreenUseStatusForActivityOnCreate(final Activity activity,  final OnNotchCallBack notchCallBack) {
+        activity.getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                fullScreenUseStatus(activity, notchCallBack);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
+    }
+
+    public void fullScreenUseStatusForOnWindowFocusChanged(final Activity activity) {
+        fullScreenUseStatus(activity);
     }
 
     /**
@@ -187,7 +230,6 @@ public class NotchTools implements INotchSupport{
         fullScreenUseStatus(activity, null);
     }
 
-    @Override
     public void fullScreenUseStatus(final Activity activity, final OnNotchCallBack notchCallBack) {
         if (notchScreenSupport == null) {
             checkScreenSupportInit(activity.getWindow());
@@ -197,6 +239,26 @@ public class NotchTools implements INotchSupport{
         }
 
     }
+
+    public void translucentStatusBar(Activity activity) {
+        if (notchScreenSupport == null) {
+            checkScreenSupportInit(activity.getWindow());
+        }
+        if (notchScreenSupport != null) {
+            notchScreenSupport.translucentStatusBar(activity);
+        }
+    }
+
+
+    public void translucentStatusBar(Activity activity, OnNotchCallBack onNotchCallBack) {
+        if (notchScreenSupport == null) {
+            checkScreenSupportInit(activity.getWindow());
+        }
+        if (notchScreenSupport != null) {
+            notchScreenSupport.translucentStatusBar(activity, onNotchCallBack);
+        }
+    }
+
 
     private void checkScreenSupportInit(Window window) {
         if (notchScreenSupport != null) {
@@ -208,10 +270,9 @@ public class NotchTools implements INotchSupport{
             notchScreenSupport = new CommonScreen();
             return;
         }
-
+        DeviceBrandTools deviceBrandTools = DeviceBrandTools.getInstance();
         //O版本的机型，进行刘海屏相关处理
         if (CURRENT_SDK < VERSION_P) {
-            DeviceBrandTools deviceBrandTools = DeviceBrandTools.getInstance();
             if (deviceBrandTools.isHuaWei()) {
                 notchScreenSupport = new HuaWeiNotchScreen();
             } else if (deviceBrandTools.isMiui()) {
@@ -220,6 +281,8 @@ public class NotchTools implements INotchSupport{
                 notchScreenSupport = new VivoNotchScreen();
             } else if (deviceBrandTools.isOppo()) {
                 notchScreenSupport = new OppoNotchScreen();
+            } else if(deviceBrandTools.isSamsung()){
+                notchScreenSupport = new SamsungPunchHoleScreen();
             } else {
                 notchScreenSupport = new CommonScreen();
             }
@@ -227,9 +290,19 @@ public class NotchTools implements INotchSupport{
         }
 
         //O以上版本，单独处理
-        if (CURRENT_SDK >= VERSION_P) {
+        if (deviceBrandTools.isHuaWei()) {
             notchScreenSupport = new PVersionNotchScreen();
-            return;
+        } else {
+            notchScreenSupport = new PVersionNotchScreenWithFakeNotch();
+        }
+    }
+
+    private boolean isPortrait(Activity activity) {
+        Configuration configuration =  activity.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return true;
+        } else {
+            return false;
         }
     }
 
