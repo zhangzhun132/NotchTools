@@ -71,7 +71,7 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         this.fullScreenUseStatus(activity, notchCallBack);
         if (isNotchScreen(activity.getWindow())) {
-            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+            NotchStatusBarUtils.showFakeNotchView(activity.getWindow());
         }
     }
 
@@ -109,7 +109,7 @@ public class MiuiNotchScreen extends AbsNotchScreenSupport {
      */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private boolean isHideNotch(Context activity) {
-       return Settings.Global.getInt(activity.getContentResolver(),
-               "force_black", 0) == 1;
+        return Settings.Global.getInt(activity.getContentResolver(),
+                "force_black", 0) == 1;
     }
 }

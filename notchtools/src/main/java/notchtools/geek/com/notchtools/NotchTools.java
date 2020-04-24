@@ -262,7 +262,7 @@ public class NotchTools  {
 
     private void checkScreenSupportInit(Window window) {
         if (notchScreenSupport != null) {
-          return;
+            return;
         }
 
         //小于O版本的，采用通用处理方案

@@ -59,21 +59,13 @@ public class SamsungPunchHoleScreen extends AbsNotchScreenSupport {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+            NotchStatusBarUtils.showFakeNotchView(activity.getWindow());
         }
     }
 
     @Override
     public void fullScreenDontUseStatusForPortrait(Activity activity, OnNotchCallBack notchCallBack) {
         fullScreenDontUseStatus(activity, notchCallBack);
-    }
-
-    @Override
-    public void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack) {
-        super.fullScreenDontUseStatusForPortrait(activity, notchCallBack);
-        if (isNotchScreen(activity.getWindow())) {
-            NotchStatusBarUtils.removeFakeNotchView(activity.getWindow());
-        }
     }
 
     @Override
@@ -97,3 +89,4 @@ public class SamsungPunchHoleScreen extends AbsNotchScreenSupport {
         }
     }
 }
+

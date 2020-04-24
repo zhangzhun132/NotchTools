@@ -78,7 +78,7 @@ public class HuaWeiNotchScreen extends AbsNotchScreenSupport {
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         this.fullScreenUseStatus(activity, notchCallBack);
         if (isNotchScreen(activity.getWindow())) {
-            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+            NotchStatusBarUtils.showFakeNotchView(activity.getWindow());
         }
     }
 

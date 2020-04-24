@@ -64,7 +64,7 @@ public class PVersionNotchScreenWithFakeNotch extends AbsNotchScreenSupport {
         WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
         attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         activity.getWindow().setAttributes(attributes);
-        NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+        NotchStatusBarUtils.showFakeNotchView(activity.getWindow());
     }
 
     @RequiresApi(api = 28)

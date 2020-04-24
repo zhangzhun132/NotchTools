@@ -3,11 +3,14 @@ package notchtools.geek.com.notchtools.helper;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import java.lang.reflect.Field;
 
 import notchtools.geek.com.notchtools.NotchTools;
 import notchtools.geek.com.notchtools.core.NotchProperty;
@@ -25,6 +28,7 @@ public class NotchStatusBarUtils {
 
     /**
      * 获取状态栏高度
+     *
      * @param context
      * @return
      */
@@ -32,17 +36,41 @@ public class NotchStatusBarUtils {
         if (statusBarHeight != -1) {
             return statusBarHeight;
         }
-        if (statusBarHeight <= 0) {
-            int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resId > 0) {
-                statusBarHeight = context.getResources().getDimensionPixelSize(resId);
+
+        int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) {
+            statusBarHeight = context.getResources().getDimensionPixelSize(resId);
+        }
+
+        if (statusBarHeight < 0) {
+            int result = 0;
+            try {
+                Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+                Object obj = clazz.newInstance();
+                Field field = clazz.getField("status_bar_height");
+                int resourceId = Integer.parseInt(field.get(obj).toString());
+                result = context.getResources().getDimensionPixelSize(resourceId);
+            } catch (Exception e) {
+            } finally {
+                statusBarHeight = result;
             }
+        }
+
+        //Use 25dp if no status bar height found
+        if (statusBarHeight < 0) {
+            statusBarHeight = dip2px(context, 25);
         }
         return statusBarHeight;
     }
 
+    private static int dip2px(Context context, float dpValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
     /**
      * 全屏flag设置
+     *
      * @param window
      * @param setListener 是否开启setOnSystemUiVisibilityChangeListener监听哦
      */
@@ -56,7 +84,7 @@ public class NotchStatusBarUtils {
             systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             if (!sShowNavigation) {
-                systemUiVisibility |=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                systemUiVisibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
             }
         }
@@ -80,6 +108,7 @@ public class NotchStatusBarUtils {
 
     /**
      * 沉浸式透明状态栏
+     *
      * @param window
      */
     public static void setStatusBarTransparent(Window window, OnNotchCallBack onNotchCallBack) {
@@ -102,7 +131,7 @@ public class NotchStatusBarUtils {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         if (!sShowNavigation) {
-            systemUiVisibility |=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
             window.getDecorView().setSystemUiVisibility(systemUiVisibility);
         }
@@ -142,34 +171,45 @@ public class NotchStatusBarUtils {
     /**
      * 全屏SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN下刘海屏适配需要
      */
-    public static void setFakeNotchView(Window window) {
-        ViewGroup notchContainer = removeFakeNotchView(window);
+    public static void showFakeNotchView(Window window) {
+        ViewGroup notchContainer = getNotchContainer(window);
         if (notchContainer == null) {
             return;
         }
-        View view = new View(window.getContext());
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                NotchTools.getFullScreenTools().getNotchHeight(window)));
-        view.setBackgroundColor(Color.BLACK);
-        notchContainer.addView(view);
+        if (notchContainer.getChildCount() == 0) {
+            View view = new View(window.getContext());
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    NotchTools.getFullScreenTools().getNotchHeight(window)));
+            view.setBackgroundColor(Color.BLACK);
+            notchContainer.addView(view);
+        }
+        notchContainer.setVisibility(View.VISIBLE);
+    }
+
+    public static void showFakeNotchViewColor(Window window, @ColorInt int colorInt) {
+        ViewGroup notchContainer = getNotchContainer(window);
+        if (notchContainer == null) {
+            return;
+        }
+        if (notchContainer.getChildCount() == 1) {
+            View view = notchContainer.getChildAt(0);
+            view.setBackgroundColor(colorInt);
+        }
     }
 
     /**
      * 全屏SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN下刘海屏适配需要
      */
-    public static ViewGroup removeFakeNotchView(Window window) {
+    public static void hideFakeNotchView(Window window) {
         ViewGroup notchContainer = getNotchContainer(window);
         if (notchContainer == null) {
-            return null;
+            return;
         }
         int childCount = notchContainer.getChildCount();
-        if (childCount > 0) {
-            notchContainer.removeAllViews();
-        }
-        return notchContainer;
+        notchContainer.setVisibility(View.GONE);
     }
 
-    public static ViewGroup getNotchContainer(Window window) {
+    private static ViewGroup getNotchContainer(Window window) {
 
         View decorView = window.getDecorView();
         if (decorView == null) {

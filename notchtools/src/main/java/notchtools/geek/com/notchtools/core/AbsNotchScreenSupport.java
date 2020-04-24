@@ -31,7 +31,11 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
 
     @Override
     public void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack) {
-        fullScreenDontUseStatus(activity, notchCallBack);
+        NotchStatusBarUtils.setFullScreenWithSystemUi(activity.getWindow(), false);
+        onBindCallBackWithNotchProperty(activity, notchCallBack);
+        if (isNotchScreen(activity.getWindow())) {
+            NotchStatusBarUtils.hideFakeNotchView(activity.getWindow());
+        }
     }
 
     @Override
@@ -47,7 +51,7 @@ public abstract class AbsNotchScreenSupport implements INotchSupport {
 
     @Override
     public void translucentStatusBar(Activity activity, OnNotchCallBack onNotchCallBack) {
-        NotchStatusBarUtils.removeFakeNotchView(activity.getWindow());
+        NotchStatusBarUtils.hideFakeNotchView(activity.getWindow());
         NotchStatusBarUtils.setStatusBarTransparent(activity.getWindow(), onNotchCallBack);
     }
 

@@ -72,7 +72,7 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
     public void fullScreenDontUseStatus(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenDontUseStatus(activity, notchCallBack);
         if (isNotchScreen(activity.getWindow())) {
-            NotchStatusBarUtils.setFakeNotchView(activity.getWindow());
+            NotchStatusBarUtils.showFakeNotchView(activity.getWindow());
         }
     }
 
@@ -96,9 +96,6 @@ public class VivoNotchScreen extends AbsNotchScreenSupport {
     @Override
     public void fullScreenDontUseStatusForLandscape(Activity activity, OnNotchCallBack notchCallBack) {
         super.fullScreenDontUseStatusForLandscape(activity, notchCallBack);
-        if (isNotchScreen(activity.getWindow())) {
-            NotchStatusBarUtils.removeFakeNotchView(activity.getWindow());
-        }
     }
 
     /**
